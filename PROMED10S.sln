@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35219.272
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PROMED10S", "PROMED10S\PROMED10S.csproj", "{8E7CD0EB-3355-401A-B9C2-CC83DCDB4DBB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E7CD0EB-3355-401A-B9C2-CC83DCDB4DBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E7CD0EB-3355-401A-B9C2-CC83DCDB4DBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E7CD0EB-3355-401A-B9C2-CC83DCDB4DBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E7CD0EB-3355-401A-B9C2-CC83DCDB4DBB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {73F7898C-1238-40C1-98E7-E13F0DFB1CB1}
+	EndGlobalSection
+EndGlobal
