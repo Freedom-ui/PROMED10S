@@ -17,6 +17,7 @@ namespace Gestion_de_Jugadores_de_Futbol
             public int Partidos { get; set; }
             public int Goles { get; set; }
             public int Asistencias { get; set; }
+            public long ValorMercado { get; set; }
         }
 
         static void Main(string[] args)
@@ -261,6 +262,25 @@ namespace Gestion_de_Jugadores_de_Futbol
             } while (!asistenciasValidas || asistencias < 0 || asistencias > 2000);
             jugadorNuevo.Asistencias = asistencias;
 
+            long valorMercado;
+            bool valorMercadoValido = false;
+
+            do
+            {
+                Console.Write("║•Valor de mercado (sin puntos): ");
+                string entrada = Console.ReadLine();
+
+                valorMercadoValido = long.TryParse(entrada, out valorMercado);
+                if (!valorMercadoValido || valorMercado < 0 || valorMercado > 1000000000)
+                {
+                    Console.WriteLine("╔═══════════════╗");
+                    Console.WriteLine("║Opción inválida║");
+                    Console.WriteLine("╚═══════════════╝");
+                    Console.WriteLine();
+                }
+            } while (!valorMercadoValido || valorMercado < 0 || valorMercado > 1000000000);
+            jugadorNuevo.ValorMercado = valorMercado;
+
             jugadores.Add(jugadorNuevo);
 
             Console.WriteLine("╔══════════════════════════╗");
@@ -377,6 +397,20 @@ namespace Gestion_de_Jugadores_de_Futbol
                     }
                 }
 
+                Console.Write("║•Valor de mercado actual: {0} ║•Nuevo valor de mercado (sin puntos): ", jugadorElegido.ValorMercado);
+                string valorNuevo = Console.ReadLine();
+                if (!string.IsNullOrEmpty(valorNuevo))
+                {
+                    if (long.TryParse(valorNuevo, out long valorValido) && valorValido >= 0 && valorValido <= 1000000000)
+                    {
+                        jugadorElegido.ValorMercado = valorValido;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Valor inválido, se mantendrá el valor actual..");
+                    }
+                }
+
                 Console.WriteLine();
                 Console.WriteLine("Datos del jugador actualizados correctamente..");
             }
@@ -405,7 +439,7 @@ namespace Gestion_de_Jugadores_de_Futbol
             {
                 Console.WriteLine();
                 Console.WriteLine("╔════════════════════════════════════════════════════════════════╗");
-                Console.WriteLine("║Jugador no encontrado (El nombre debe coincidir perfectamente)║");
+                Console.WriteLine("║Jugador no encontrado (El nombre debe coincidir perfectamente)  ║");
                 Console.WriteLine("╚════════════════════════════════════════════════════════════════╝");
                 Console.WriteLine();
             }
@@ -415,14 +449,15 @@ namespace Gestion_de_Jugadores_de_Futbol
         static void ListarJugadores(List<Jugador> jugadores)
         {
             //Define las columnas y sus medidas 
-            Console.WriteLine("╔═════════════════════════════════════════════ Lista de Jugadores ═════════════════════════════════════════════╗");
-            Console.WriteLine("║{0,-20} ║{1,-5} ║{2,-15} ║{3,-18} ║{4,-18} ║{5,-8} ║{6,-6} ║{7,-6}║", "Nombre", "Edad", "Pais", "Club", "Posición", "Partidos", "Goles", "Asist");
-            Console.WriteLine(new string('═', 112));
+            Console.WriteLine("╔═════════════════════════════════════════════════════ Lista de Jugadores ═════════════════════════════════════════════════════╗");
+            Console.WriteLine("║{0,-20} ║{1,-5} ║{2,-15} ║{3,-18} ║{4,-18} ║{5,-8} ║{6,-6} ║{7,-6} ║{8,-14}║",
+                "Nombre", "Edad", "Pais", "Club", "Posición", "Partidos", "Goles", "Asist", "Valor");
+            Console.WriteLine(new string('═', 128));
 
             // Recorrer la lista de jugadores
             foreach (var jugador in jugadores)
             {
-                Console.WriteLine("║{0,-20} ║{1,-5} ║{2,-15} ║{3,-18} ║{4,-18} ║{5,-8} ║{6,-6} ║{7,-6}║",
+                Console.WriteLine("║{0,-20} ║{1,-5} ║{2,-15} ║{3,-18} ║{4,-18} ║{5,-8} ║{6,-6} ║{7,-6} ║${8,-13:N0}║",
                     jugador.Nombre,
                     jugador.Edad,
                     jugador.Pais,
@@ -430,8 +465,10 @@ namespace Gestion_de_Jugadores_de_Futbol
                     jugador.Posicion,
                     jugador.Partidos,
                     jugador.Goles,
-                    jugador.Asistencias);
-                Console.WriteLine("╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
+                    jugador.Asistencias,
+                    jugador.ValorMercado);
+
+                Console.WriteLine("╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
             }
 
             Console.WriteLine();
@@ -441,7 +478,7 @@ namespace Gestion_de_Jugadores_de_Futbol
         static void BuscarJugador(List<Jugador> jugadores)
         {
             Console.WriteLine("══════════════ Buscar Jugador ══════════════");
-            Console.Write("║Jugador a buscar: ");
+            Console.Write("║•Jugador a buscar: ");
             string buscarJugador = Console.ReadLine();
             Console.WriteLine();
 
@@ -452,16 +489,17 @@ namespace Gestion_de_Jugadores_de_Futbol
                 if (!string.IsNullOrEmpty(jugador.Nombre) && jugador.Nombre.Equals(buscarJugador, StringComparison.OrdinalIgnoreCase))
                 {
                     Console.WriteLine();
-                    Console.WriteLine("╔═══════════ Jugador encontrado ════════════");
-                    Console.WriteLine("║Nombre: {0}", jugador.Nombre);
-                    Console.WriteLine("║Edad: {0}", jugador.Edad);
-                    Console.WriteLine("║País: {0}", jugador.Pais);
-                    Console.WriteLine("║Club: {0}", jugador.Club);
-                    Console.WriteLine("║Posición: {0}", jugador.Posicion);
-                    Console.WriteLine("║Partidos jugados: {0}", jugador.Partidos);
-                    Console.WriteLine("║Goles: {0}", jugador.Goles);
-                    Console.WriteLine("║Asistencias: {0}", jugador.Asistencias);
-                    Console.WriteLine("╚═══════════════════════════════════════════");
+                    Console.WriteLine("╔═══════════ Jugador encontrado ═══════════");
+                    Console.WriteLine("║•Nombre: {0}", jugador.Nombre);
+                    Console.WriteLine("║•Edad: {0}", jugador.Edad);
+                    Console.WriteLine("║•País: {0}", jugador.Pais);
+                    Console.WriteLine("║•Club: {0}", jugador.Club);
+                    Console.WriteLine("║•Posición: {0}", jugador.Posicion);
+                    Console.WriteLine("║•Partidos jugados: {0}", jugador.Partidos);
+                    Console.WriteLine("║•Goles: {0}", jugador.Goles);
+                    Console.WriteLine("║•Asistencias: {0}", jugador.Asistencias);
+                    Console.WriteLine("║•valor de mercado: ${0:N0}", jugador.ValorMercado);
+                    Console.WriteLine("╚══════════════════════════════════════════");
                     Console.WriteLine();
                     jugadorEncontrado = true;
                     break;
@@ -489,13 +527,14 @@ namespace Gestion_de_Jugadores_de_Futbol
                 Console.WriteLine("╔════════════════════════════╗");
                 Console.WriteLine("║          Rankings          ║");
                 Console.WriteLine("╠════════════════════════════╣");
-                Console.WriteLine("║1.Top goles                 ║");
-                Console.WriteLine("║2.Top Asistencias           ║");
-                Console.WriteLine("║3.Top goles + asistencias   ║");
-                Console.WriteLine("║4.Volver al menú            ║");
+                Console.WriteLine("║1•Top goles                 ║");
+                Console.WriteLine("║2•Top Asistencias           ║");
+                Console.WriteLine("║3•Top goles + asistencias   ║");
+                Console.WriteLine("║4•Top valor de mercado      ║");
+                Console.WriteLine("║5•Volver al menú            ║");
                 Console.WriteLine("╚════════════════════════════╝");
 
-                Console.Write("Ingrese una opción: ");
+                Console.Write("•Ingrese una opción: ");
                 string input = Console.ReadLine();
                 opcionValida = int.TryParse(input, out opcion);
 
@@ -511,6 +550,9 @@ namespace Gestion_de_Jugadores_de_Futbol
                         TopGolesAsistencias(jugadores);
                         break;
                     case 4:
+                        TopValorMercado(jugadores);
+                        break;
+                    case 5:
                         return;
                     default:
                         Console.WriteLine("Opción no valida, intente de nuevo..");
@@ -554,6 +596,17 @@ namespace Gestion_de_Jugadores_de_Futbol
                 Console.WriteLine("╠{0,-20} ║Goles:{1,4} ║Asistencias:{2,4} ║Partidos:{2,4} ║Total: {3,4}║",
                     jugador.Nombre, jugador.Goles, jugador.Asistencias, jugador.Goles + jugador.Asistencias);
                 Console.WriteLine("╚══════════════════════════════════════════════════════════════════════════════╝");
+            }
+        }
+        static void TopValorMercado(List<Jugador> jugadores)
+        {
+            Console.WriteLine("╔════════════════ Top Valor de Mercado ════════════════╗");
+            var topValorMercado = jugadores.OrderByDescending(j => j.ValorMercado).Take(3).ToList();
+
+            foreach (var jugador in topValorMercado)
+            {
+                Console.WriteLine("╠{0,-20} ║Valor de Mercado:${1,-14:N0}║", jugador.Nombre, jugador.ValorMercado);
+                Console.WriteLine("╚══════════════════════════════════════════════════════╝");
             }
         }
     }
